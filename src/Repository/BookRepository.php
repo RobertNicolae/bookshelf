@@ -27,6 +27,7 @@ class BookRepository
         $stmt->execute();
 
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        dump($result);exit;
         $books = [];
         foreach ($result as $item) {
             $books[] = $this->mapDataOnEntity($item);
