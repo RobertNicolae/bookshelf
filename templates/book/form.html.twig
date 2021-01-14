@@ -2,15 +2,26 @@
 
 {% block title %}Formular{% endblock %}
 {% block content %}
-    <h3>Adauga formular</h3>
-    <form>
+    <h3>Adauga carte</h3>
+    <form method="post">
+        {% if errors.book_name is defined %}
+            <div class="alert alert-danger" role="alert">
+                {{ errors.book_name }}
+            </div>
+        {% endif %}
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+            <label for="exampleFormControlInput1" class="form-label">Name</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="book_name">
         </div>
+        {% if errors.book_description is defined %}
+            <div class="alert alert-danger" role="alert">
+                {{ errors.book_description }}
+            </div>
+        {% endif %}
         <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <label for="exampleFormControlInput1" class="form-label">Description</label>
+            <textarea class="form-control" id="exampleFormControlInput1" name="book_description" rows="3"></textarea>
         </div>
+        <input type="submit" class="btn btn-primary" value="Salveaza">
     </form>
 {% endblock %}

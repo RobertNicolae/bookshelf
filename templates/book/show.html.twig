@@ -2,5 +2,13 @@
 
 {% block title %}Carte{% endblock %}
 {% block content %}
-<h3>TEST</h3>
+    <div class="row">
+        {% for book in books %}
+            <div class="col-md-3">
+                {% embed 'book/components/book_card.html.twig' with {
+                    book: book
+                } %}{% endembed %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -8,6 +8,8 @@ use LightFramework\DataStructure\ArrayCollection;
 
 class Request
 {
+    public const METHOD_GET = "GET", METHOD_POST = "POST";
+
     /**
      * Request body parameters ($_POST)
      *
@@ -151,5 +153,8 @@ class Request
         return $this->session;
     }
 
-
+    public function isMethod(string $method): bool
+    {
+        return $this->serverParams->get('REQUEST_METHOD') === $method;
+    }
 }
