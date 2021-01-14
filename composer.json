@@ -1,0 +1,21 @@
+{
+  "type": "project",
+  "authors": [
+    {
+      "name": "Robert Balanoiu",
+      "email": "balanoiurobert19@gmail.com"
+    }
+  ],
+  "require": {
+    "ext-pdo": "*",
+    "twig/twig": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "LightFramework\\": "framework/src"
+    },
+    "classmap": [
+      "src/"
+    ]
+  }
+}
