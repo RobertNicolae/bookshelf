@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Exception\BookDescriptionInvalidException;
 use App\Exception\BookNameInvalidException;
+use App\Exception\BookNotFoundException;
 use App\Repository\BookRepository;
 use LightFramework\DataStructure\ArrayCollection;
 
@@ -28,6 +29,17 @@ class BookService
         $this->validateDataForBook($bookFormParams);
 
         $this->bookRepo->insertBook($bookFormParams->get("book_name"), $bookFormParams->get("book_description"));
+    }
+
+    public function deleteBook(int $id): void
+    {
+        $book = $this->bookRepo->findById($id);
+
+        if (!$book) {
+            throw new BookNotFoundException();
+        }
+
+        $this->bookRepo->deleteBook($id);
     }
 
     /**

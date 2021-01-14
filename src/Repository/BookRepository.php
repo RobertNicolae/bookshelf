@@ -35,6 +35,22 @@ class BookRepository
         return $books;
     }
 
+    /**
+     * @param int $id
+     * @return Book|null
+     */
+    public function findById(int $id): ?Book
+    {
+        $query = "SELECT * FROM book WHERE id = :id LIMIT 1";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([":id" => $id]);
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $result !== false ? $this->mapDataOnEntity($result) : null;
+    }
+
     public function insertBook(string $name, string $description): void
     {
         $query = "INSERT INTO book (name, description) VALUES (:name, :description)";
@@ -43,6 +59,16 @@ class BookRepository
         $stmt->execute([
             ":name" => $name,
             ":description" => $description
+        ]);
+    }
+
+    public function deleteBook(int $id): void
+    {
+        $query = "DELETE FROM book WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+            ":id" => $id,
         ]);
     }
 

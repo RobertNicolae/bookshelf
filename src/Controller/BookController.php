@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Exception\BookDescriptionInvalidException;
 use App\Exception\BookNameInvalidException;
+use App\Exception\BookNotFoundException;
 use App\Repository\BookRepository;
 use App\Service\BookService;
 use LightFramework\Controller\AbstractController;
@@ -53,5 +54,19 @@ class BookController extends AbstractController
             die;
         }
         return $this->render('book/form.html.twig');
+    }
+
+    public function deleteBook(Request $request): void
+    {
+
+        try {
+            $this->bookService->deleteBook($request->getRequestParams()->get("id"));
+        } catch (BookNotFoundException $bookNotFoundException) {
+            echo "Cartea nu exista";
+            exit;
+        }
+
+        header("Location: /books");
+        die;
     }
 }

@@ -29,7 +29,10 @@ $routes = [
         'method' => ["GET", "POST"],
         'function' => "addBook"
     ],
-
-
-
+    [
+        'path' => '/books/delete',
+        'controller' => BookController::class,
+        'method' => ["GET"],
+        'function' => "deleteBook"
+    ],
 ];
