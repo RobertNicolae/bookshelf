@@ -8,8 +8,104 @@ class Book
 {
     protected int $id;
     protected string $name;
-    protected string $description;
-    protected \DateTime $created;
+    protected int $publisherId;
+    protected int $userId;
+    protected string $isbn;
+    protected int $totalPages;
+    protected string $coverImage;
+    protected ?string $description = null;
+
+    /**
+     * @return int
+     */
+    public function getPublisherId(): int
+    {
+        return $this->publisherId;
+    }
+
+    /**
+     * @param int $publisherId
+     * @return Book
+     */
+    public function setPublisherId(int $publisherId): Book
+    {
+        $this->publisherId = $publisherId;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param int $userId
+     * @return Book
+     */
+    public function setUserId(int $userId): Book
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsbn(): string
+    {
+        return $this->isbn;
+    }
+
+    /**
+     * @param string $isbn
+     * @return Book
+     */
+    public function setIsbn(string $isbn): Book
+    {
+        $this->isbn = $isbn;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalPages(): int
+    {
+        return $this->totalPages;
+    }
+
+    /**
+     * @param int $totalPages
+     * @return Book
+     */
+    public function setTotalPages(int $totalPages): Book
+    {
+        $this->totalPages = $totalPages;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCoverImage(): string
+    {
+        return $this->coverImage;
+    }
+
+    /**
+     * @param string $coverImage
+     * @return Book
+     */
+    public function setCoverImage(string $coverImage): Book
+    {
+        $this->coverImage = $coverImage;
+        return $this;
+    }
+
+
 
     /**
      * @return int
@@ -65,21 +161,5 @@ class Book
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreated(): \DateTime
-    {
-        return $this->created;
-    }
 
-    /**
-     * @param \DateTime $created
-     * @return Book
-     */
-    public function setCreated(\DateTime $created): Book
-    {
-        $this->created = $created;
-        return $this;
-    }
 }
