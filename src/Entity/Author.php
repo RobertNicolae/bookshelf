@@ -9,6 +9,11 @@ class Author
     protected int $id;
     protected string $name;
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     /**
      * @return int
      */

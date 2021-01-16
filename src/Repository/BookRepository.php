@@ -4,16 +4,26 @@
 namespace App\Repository;
 
 
+use App\Builder\AuthorBuilder;
+use App\Builder\PublisherBuilder;
+use App\Builder\UserBuilder;
 use App\Entity\Book;
+use App\Entity\User;
 use LightFramework\Database\DatabaseConnection;
 
 class BookRepository
 {
     protected \PDO $conn;
+    protected UserBuilder $userBuilder;
+    protected AuthorBuilder $authorBuilder;
+    protected PublisherBuilder $publisherBuilder;
 
     public function __construct()
     {
         $this->conn = DatabaseConnection::getConnection();
+        $this->userBuilder = new UserBuilder();
+        $this->authorBuilder = new AuthorBuilder();
+        $this->publisherBuilder = new PublisherBuilder();
     }
 
     /**
@@ -21,7 +31,7 @@ class BookRepository
      */
     public function findAll(): array
     {
-        $query = "SELECT * FROM book";
+        $query = $this->selectQueryForBook();
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -41,7 +51,7 @@ class BookRepository
      */
     public function findById(int $id): ?Book
     {
-        $query = "SELECT * FROM book WHERE id = :id LIMIT 1";
+        $query = $this->selectQueryForBook("WHERE b.id = :id");
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute([":id" => $id]);
@@ -72,15 +82,64 @@ class BookRepository
         ]);
     }
 
+    protected function selectQueryForBook(?string $whereClause = null): string
+    {
+        return "SELECT b.name                          AS book_name,
+       b.id                            AS book_id,
+       b.description                   AS book_description,
+       b.isbn                          AS book_isbn,
+       b.total_pages                   AS book_total_pages,
+       b.cover_image                   AS book_cover_image,
+       u.id                            AS user_id,
+       u.email                         AS user_email,
+       u.password                      AS user_password,
+       u.role                          AS user_role,
+       u.created                       AS user_created,
+       p.id                            AS publisher_id,
+       p.name                          AS publisher_name,
+       GROUP_CONCAT(a.id, '/', a.name) AS authors
+FROM book AS b
+         LEFT JOIN publisher AS p on b.publisher_id = p.id
+         LEFT JOIN user AS u on b.user_id = u.id
+         LEFT JOIN author_book ab on b.id = ab.book_id
+         LEFT JOIN author a on ab.author_id = a.id
+ " . $whereClause . " 
+GROUP BY b.id";
+    }
+
     protected function mapDataOnEntity(array $rowData): Book
     {
         $book = new Book();
 
+        $user = $this->userBuilder->getUser(
+            $rowData['user_id'],
+            $rowData['user_email'],
+            $rowData['user_password'],
+            $rowData['user_role'],
+            \DateTime::createFromFormat("Y-m-d H:i:s", $rowData['user_created'])
+        );
+
+        $authors = [];
+        $authorStringsArr = explode(",", $rowData['authors']);
+        foreach ($authorStringsArr as $authorStringArr) {
+            list($authorId, $authorName) = explode('/', $authorStringArr);
+            $author = $this->authorBuilder->getAuthor($authorId, $authorName);
+            $authors[] = $author;
+        }
+
+        $publisher = $this->publisherBuilder->getPublisher($rowData['publisher_id'], $rowData['publisher_name']);
+
+        //TODO: De mutat logica de creeare book in BookBuilder
         $book
-            ->setId($rowData["id"])
-            ->setName($rowData["name"])
-            ->setDescription($rowData["description"])
-            ->setCreated(\DateTime::createFromFormat("Y-m-d H:i:s", $rowData["created"]));
+            ->setId($rowData["book_id"])
+            ->setName($rowData["book_name"])
+            ->setDescription($rowData["book_description"])
+            ->setIsbn($rowData['book_isbn'])
+            ->setTotalPages($rowData['book_total_pages'])
+            ->setCoverImage($rowData['book_cover_image'])
+            ->setUser($user)
+            ->setAuthors($authors)
+            ->setPublisher($publisher);
 
         return $book;
     }

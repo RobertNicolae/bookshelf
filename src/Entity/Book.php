@@ -6,48 +6,76 @@ namespace App\Entity;
 
 class Book
 {
+    /**
+     * @var int
+     */
     protected int $id;
+    /**
+     * @var string
+     */
     protected string $name;
-    protected int $publisherId;
-    protected int $userId;
+    /**
+     * @var User
+     */
+    protected User $user;
+    /**
+     * @var Publisher
+     */
+    protected Publisher $publisher;
+    /**
+     * @var array
+     */
+    protected array $authors;
+    /**
+     * @var string
+     */
     protected string $isbn;
+    /**
+     * @var int
+     */
     protected int $totalPages;
+    /**
+     * @var string
+     */
     protected string $coverImage;
+    /**
+     * @var string|null
+     */
     protected ?string $description = null;
 
     /**
-     * @return int
+     * @return User
      */
-    public function getPublisherId(): int
+    public function getUser(): User
     {
-        return $this->publisherId;
+        return $this->user;
     }
 
     /**
-     * @param int $publisherId
+     * @param User $user
      * @return Book
      */
-    public function setPublisherId(int $publisherId): Book
+    public function setUser(User $user): Book
     {
-        $this->publisherId = $publisherId;
+        $this->user = $user;
         return $this;
     }
 
     /**
-     * @return int
+     * @return Publisher
      */
-    public function getUserId(): int
+    public function getPublisher(): Publisher
     {
-        return $this->userId;
+        return $this->publisher;
     }
 
     /**
-     * @param int $userId
+     * @param Publisher $publisher
      * @return Book
      */
-    public function setUserId(int $userId): Book
+    public function setPublisher(Publisher $publisher): Book
     {
-        $this->userId = $userId;
+        $this->publisher = $publisher;
         return $this;
     }
 
@@ -105,7 +133,23 @@ class Book
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getAuthors(): array
+    {
+        return $this->authors;
+    }
 
+    /**
+     * @param array $authors
+     * @return Book
+     */
+    public function setAuthors(array $authors): Book
+    {
+        $this->authors = $authors;
+        return $this;
+    }
 
     /**
      * @return int
@@ -144,18 +188,18 @@ class Book
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      * @return Book
      */
-    public function setDescription(string $description): Book
+    public function setDescription(?string $description): Book
     {
         $this->description = $description;
         return $this;
