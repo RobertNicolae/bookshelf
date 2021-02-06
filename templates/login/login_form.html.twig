@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Login {% endblock %}
+{% block content %}
+    <h3>Log in your account</h3>
+    <form method="post">
+        {% if errors.credentials is defined %}
+            <div class="alert alert-danger" role="alert">
+                {{ errors.credentials }}
+            </div>
+        {% endif %}
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Email</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="email">
+            <label for="exampleFormControlInput1" class="form-label">Password</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="password">
+        </div>
+        <input type="submit" name="login" class="btn btn-primary" value="Login">
+    </form>
+{% endblock %}

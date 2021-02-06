@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Builder\AuthorBuilder;
 use App\Builder\PublisherBuilder;
 use App\Builder\UserBuilder;
+use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\User;
 use LightFramework\Database\DatabaseConnection;
@@ -82,6 +83,24 @@ class BookRepository
         ]);
     }
 
+    public function findAllByAuthor(Author $author): array
+    {
+        $query = $this->selectQueryForBook("WHERE a.id = :authorId");
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+            ":authorId" => $author->getId()
+        ]);
+
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $books = [];
+        foreach ($result as $item) {
+            $books[] = $this->mapDataOnEntity($item);
+        }
+
+        return $books;
+    }
+
     protected function selectQueryForBook(?string $whereClause = null): string
     {
         return "SELECT b.name                          AS book_name,
@@ -118,14 +137,19 @@ GROUP BY b.id";
             $rowData['user_role'],
             \DateTime::createFromFormat("Y-m-d H:i:s", $rowData['user_created'])
         );
-
         $authors = [];
-        $authorStringsArr = explode(",", $rowData['authors']);
-        foreach ($authorStringsArr as $authorStringArr) {
-            list($authorId, $authorName) = explode('/', $authorStringArr);
-            $author = $this->authorBuilder->getAuthor($authorId, $authorName);
-            $authors[] = $author;
+        if(isset($rowData["authors"])){
+
+            $authorStringsArr = explode(",", $rowData['authors']);
+
+            foreach ($authorStringsArr as $authorStringArr) {
+                list($authorId, $authorName) = explode('/', $authorStringArr);
+
+                $author = $this->authorBuilder->getAuthor($authorId, $authorName);
+                $authors[] = $author;
+            }
         }
+
 
         $publisher = $this->publisherBuilder->getPublisher($rowData['publisher_id'], $rowData['publisher_name']);
 

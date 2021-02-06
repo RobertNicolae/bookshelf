@@ -12,7 +12,7 @@ class PublicController extends AbstractController
 {
     public function index(Request $request): Response
     {
-        return $this->render("base.html.twig", [
+        return $this->render("book/components/form.html.twig", [
             "names" => ["1", "tets"]
         ]);
     }

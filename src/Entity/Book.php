@@ -43,6 +43,11 @@ class Book
      */
     protected ?string $description = null;
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     /**
      * @return User
      */
