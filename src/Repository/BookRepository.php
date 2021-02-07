@@ -62,15 +62,41 @@ class BookRepository
         return $result !== false ? $this->mapDataOnEntity($result) : null;
     }
 
-    public function insertBook(string $name, string $description): void
+    /**
+     * @param string $name
+     * @param string $description
+     * @param string $isbn
+     * @param int $totalPages
+     * @param string $coverImage
+     * @param int $publisherId
+     * @param int[] $authorsIds
+     */
+    public function insertBook(string $name, string $description, string $isbn, int $totalPages, string $coverImage, int $publisherId, array $authorsIds): void
     {
-        $query = "INSERT INTO book (name, description) VALUES (:name, :description)";
+        $query = "INSERT INTO book (name, description, isbn, total_pages, publisher_id, cover_image, user_id) VALUES (:name, :description, :isbn, :total_pages, :publisher_id, :cover_image, :user_id)";
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute([
             ":name" => $name,
-            ":description" => $description
+            ":description" => $description,
+            ":isbn" => $isbn,
+            ":total_pages" => $totalPages,
+            ":publisher_id" => $publisherId,
+            ":cover_image" => $coverImage,
+            ":user_id" => $_SESSION['user']->getId()
         ]);
+
+        $bookId = $this->conn->lastInsertId();
+
+        $query = "INSERT INTO author_book(author_id, book_id) VALUES ";
+
+        foreach ($authorsIds as $authorId) {
+            $query .= "(" . $authorId . "," . $bookId . "), ";
+        }
+        $query = rtrim($query, ", ");
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
     }
 
     public function deleteBook(int $id): void
@@ -138,7 +164,7 @@ GROUP BY b.id";
             \DateTime::createFromFormat("Y-m-d H:i:s", $rowData['user_created'])
         );
         $authors = [];
-        if(isset($rowData["authors"])){
+        if (isset($rowData["authors"])) {
 
             $authorStringsArr = explode(",", $rowData['authors']);
 

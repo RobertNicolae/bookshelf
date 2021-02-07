@@ -11,7 +11,7 @@ class DatabaseConnection
     public static function getConnection(): \PDO {
         if(!self::$conn) {
             self::$conn = new \PDO($_ENV['DATABASE_DSN'], $_ENV['DATABASE_USER'], $_ENV['DATABASE_PASSWORD']);
-            if($_ENV["APP_MODE"] === "DEV") {
+            if(strtoupper($_ENV["APP_MODE"]) === "DEV") {
                 self::$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             }
         }

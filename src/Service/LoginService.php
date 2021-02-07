@@ -5,40 +5,41 @@ namespace App\Service;
 
 
 use App\Entity\User;
-use App\Exception\AuthorInvalidNameException;
 use App\Exception\LoginInvalidCredentialsException;
-use App\Repository\LoginRepository;
+use App\Repository\UserRepository;
 use LightFramework\DataStructure\ArrayCollection;
 
 class LoginService
 {
-    protected LoginRepository $loginRepo;
-    public function __construct(){
-        $this->loginRepo = new LoginRepository();
+    protected UserRepository $userRepo;
+
+    public function __construct()
+    {
+        $this->userRepo = new UserRepository();
     }
 
     public function logout(): void
     {
-        session_start();
-        unset($_SESSION["id"]);
-        unset($_SESSION["email"]);
-        $_SESSION["loggedin"] = false;
-        header("Location:/login");
+        unset($_SESSION["user"]);
     }
-    public function login(ArrayCollection $params): void
-    {
-        $result = $this->loginRepo->login($params->get("email"), $params->get("password"));
 
-        if ($result === null) {
+    public function login(string $email, string $inputPassword): void
+    {
+        $user = $this->userRepo->findByEmail($email);
+
+        if (!$user) {
             throw new LoginInvalidCredentialsException();
         }
 
+        if ($user->getPassword() !== sha1($inputPassword)) {
+            throw new LoginInvalidCredentialsException();
+        }
+
+        $this->setUserSession($user);
     }
 
-    public function setUserSession(int $id, string $email): void
+    protected function setUserSession(User $user): void
     {
-        $_SESSION["loggedin"] = true;
-        $_SESSION["id"] = $id;
-        $_SESSION["email"] = $email;
+        $_SESSION["user"] = $user;
     }
 }

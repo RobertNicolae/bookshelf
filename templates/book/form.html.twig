@@ -22,6 +22,34 @@
             <label for="exampleFormControlInput1" class="form-label">Description</label>
             <textarea class="form-control" id="exampleFormControlInput1" name="book_description" rows="3"></textarea>
         </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">ISBN</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="isbn">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Total pages</label>
+            <input type="number" class="form-control" id="exampleFormControlInput1" name="total_pages">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Cover image</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="cover_image">
+        </div>
+        <div class="mb-3">
+            <label>Choose publisher:</label>
+            <select name="publisher">
+                {% for publisher in publishers %}
+                    <option value="{{ publisher.id }}">{{ publisher.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Choose authors:</label>
+            <select name="authors[]" multiple>
+                {% for author in authors %}
+                    <option value="{{ author.id }}">{{ author.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <input type="submit" class="btn btn-primary" value="Salveaza">
     </form>
 {% endblock %}

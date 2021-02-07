@@ -9,7 +9,7 @@ use App\Entity\Publisher;
 use App\Entity\User;
 use LightFramework\Database\DatabaseConnection;
 
-class LoginRepository
+class UserRepository
 {
     protected \PDO $connection;
     protected UserBuilder $userBuilder;
@@ -20,13 +20,12 @@ class LoginRepository
         $this->userBuilder = new UserBuilder();
     }
 
-    public function login(string $email, string $password): ?User
+    public function findByEmail(string $email): ?User
     {
-        $query = "SELECT * from user u WHERE u.email = :email AND u.password = :password; ";
+        $query = "SELECT * from user u WHERE u.email = :email; ";
         $stmt = $this->connection->prepare($query);
         $stmt->execute([
-            "email" => $email,
-            "password" => $password
+            "email" => $email
         ]);
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 

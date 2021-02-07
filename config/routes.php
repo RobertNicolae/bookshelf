@@ -93,9 +93,9 @@ $routes = [
         'function' => "login"
     ],
     [
-        'path' => '/login/welcome',
+        'path' => '/logout',
         'controller' => LoginController::class,
         'method' => ["GET", "POST"],
-        'function' => "welcome"
+        'function' => "logout"
     ],
 ];
