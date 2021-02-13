@@ -78,7 +78,7 @@ class AuthorController extends AbstractController
 
         }
          return $this->render('author/form_edit.html.twig', [
-             "author" =>  $this->authorRepo->findById($request->getRequestParams()->get("id"))
+             "author" => $this->authorRepo->findById($request->getRequestParams()->get("id"))
          ]);
     }
 }

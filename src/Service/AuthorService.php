@@ -34,8 +34,6 @@ class AuthorService
         $this->authorRepo->insertAuthor($params->get("author_name"));
     }
 
-
-
     public function deleteAuthor(int $id): void
     {
         $this->authorRepo->findById($id);

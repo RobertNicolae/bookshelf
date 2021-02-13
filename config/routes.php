@@ -33,6 +33,12 @@ $routes = [
         'function' => "addBook"
     ],
     [
+        'path' => '/books/edit',
+        'controller' => BookController::class,
+        'method' => ["GET", "POST"],
+        'function' => "editBook"
+    ],
+    [
         'path' => '/books/delete',
         'controller' => BookController::class,
         'method' => ["GET"],
@@ -97,5 +103,11 @@ $routes = [
         'controller' => LoginController::class,
         'method' => ["GET", "POST"],
         'function' => "logout"
+    ],
+    [
+        'path' => '/register',
+        'controller' => LoginController::class,
+        'method' => ["GET", "POST"],
+        'function' => "register"
     ],
 ];

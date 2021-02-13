@@ -85,7 +85,6 @@ class BookRepository
             ":cover_image" => $coverImage,
             ":user_id" => $_SESSION['user']->getId()
         ]);
-
         $bookId = $this->conn->lastInsertId();
 
         $query = "INSERT INTO author_book(author_id, book_id) VALUES ";
@@ -125,6 +124,39 @@ class BookRepository
         }
 
         return $books;
+    }
+
+    public function update(int $bookId, string $name, string $description, string $isbn, int $totalPages, string $coverImage, int $publisherId, array $authorsIds): void
+    {
+        $query = "UPDATE book b SET b.name = :name , b.description = :description, b.isbn = :isbn, b.total_pages = :totalPages, b.cover_image = :cover_image, b.publisher_id = :publisher_id WHERE b.id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+            ":name" => $name,
+            ":description" => $description,
+            ":isbn" => $isbn,
+            ":totalPages" => $totalPages,
+            ":publisher_id" => $publisherId,
+            ":cover_image" => $coverImage,
+            ":id" => $bookId,
+        ]);
+        $bookId = $this->conn->lastInsertId();
+
+        $query = "DELETE FROM author_book ab WHERE ab.book_id = :bookId ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+           ":bookId" => $bookId
+        ]);
+
+        $query = "INSERT INTO author_book(author_id, book_id) VALUES ";
+
+        foreach ($authorsIds as $authorId) {
+            $query .= "(" . $authorId . "," . $bookId . "), ";
+        }
+        $query = rtrim($query, ", ");
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
     }
 
     protected function selectQueryForBook(?string $whereClause = null): string

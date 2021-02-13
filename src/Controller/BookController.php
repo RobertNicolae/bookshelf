@@ -67,7 +67,6 @@ class BookController extends AbstractController
 
     public function deleteBook(Request $request): void
     {
-
         try {
             $this->bookService->deleteBook($request->getRequestParams()->get("id"));
         } catch (BookNotFoundException $bookNotFoundException) {
@@ -77,5 +76,21 @@ class BookController extends AbstractController
 
         header("Location: /books");
         die;
+    }
+
+    public function editBook(Request $request): Response
+    {
+        if ($request->isMethod(Request::METHOD_POST)) {
+
+            $this->bookRepo->update($request->getRequestParams()->get("id"), $request->getRequestParams()->get("book_name"), $request->getRequestParams()->get("book_description"), $request->getRequestParams()->get("isbn"), $request->getRequestParams()->get("total_pages"), $request->getRequestParams()->get("cover_image"), $request->getRequestParams()->get("publisher"), $request->getRequestParams()->get());
+            header("Location: /books");
+            die();
+
+        }
+        return $this->render('book/form_edit.html.twig', [
+            "book" =>  $this->bookRepo->findById($request->getRequestParams()->get("id")),
+            'publishers' => $this->publisherRepo->findAll(),
+            'authors' => $this->authorRepo->findAll()
+        ]);
     }
 }

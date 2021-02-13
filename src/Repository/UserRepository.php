@@ -19,6 +19,16 @@ class UserRepository
         $this->connection = DatabaseConnection::getConnection();
         $this->userBuilder = new UserBuilder();
     }
+    public function register(string $email, string $password): void
+    {
+
+        $query = "INSERT INTO user (email, password) VALUES (:email, :password) ";
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute([
+            "email" => $email,
+            "password" => $password
+        ]);
+    }
 
     public function findByEmail(string $email): ?User
     {
@@ -31,6 +41,7 @@ class UserRepository
 
         return $result !== false ? $this->mapDataOnEntity($result) : null;
     }
+
 
     protected function mapDataOnEntity(array $rowData): User
     {
