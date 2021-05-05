@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Autori {% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for author in authors %}
+            <div class="col-md-3">
+                {% embed 'author/components/author_card.html.twig' with {
+                    books: booksByAuthor[author.id],
+                    author: author
+                } %}{% endembed %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb-3">
+        <form action="/authors/add">
+            <input type="submit" value="Add author">
+        </form>
+    </div>
+{% endblock %}

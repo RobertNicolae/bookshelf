@@ -12,8 +12,8 @@ class PublicController extends AbstractController
 {
     public function index(Request $request): Response
     {
-        return $this->render("base.html.twig", [
-            "names" => ["1", "tets"]
+        return $this->render("public/welcome.html.twig", [
+            "user" => $request->getSession()->get('user')
         ]);
     }
 

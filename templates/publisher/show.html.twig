@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %} Add publisher {% endblock %}
+{% block content %}
+    <div class="row">
+        {% for publisher in publishers %}
+            <div class="col-md-3">
+                {% embed 'publisher/components/publisher_card.html.twig' with {
+                    publisher: publisher
+                } %}{% endembed %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mb-3">
+        <form action="/publisher/add">
+            <input type="submit" value="Add Publisher">
+        </form>
+    </div>
+{% endblock %}

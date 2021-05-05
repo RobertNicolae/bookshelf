@@ -28,7 +28,15 @@ class BookService
     {
         $this->validateDataForBook($bookFormParams);
 
-        $this->bookRepo->insertBook($bookFormParams->get("book_name"), $bookFormParams->get("book_description"));
+        $this->bookRepo->insertBook(
+            $bookFormParams->get("book_name"),
+            $bookFormParams->get("book_description"),
+            $bookFormParams->get("isbn"),
+            $bookFormParams->get("total_pages"),
+            $bookFormParams->get("cover_image"),
+            $bookFormParams->get("publisher"),
+            $bookFormParams->get("authors"),
+        );
     }
 
     public function deleteBook(int $id): void
