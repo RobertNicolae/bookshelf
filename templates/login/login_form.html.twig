@@ -2,6 +2,7 @@
 
 {% block title %} Login {% endblock %}
 {% block content %}
+
     <h3>Log in your account</h3>
     <form method="post">
         {% if errors.credentials is defined %}
@@ -11,9 +12,9 @@
         {% endif %}
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Email</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" name="email">
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="email" required>
             <label for="exampleFormControlInput1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleFormControlInput1" name="password">
+            <input type="password" class="form-control" id="exampleFormControlInput1" name="password" required>
         </div>
         <input type="submit" name="login" class="btn btn-primary" value="Login">
         <a href="/register">Register</a>

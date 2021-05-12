@@ -50,6 +50,12 @@ class BookService
         $this->bookRepo->deleteBook($id);
     }
 
+
+    public function update(int $bookId, string $name, string $description, string $isbn, int $totalPages, string $coverImage, int $publisherId, array $authorIds): void
+    {
+        $this->bookRepo->update($bookId, $name, $description, $isbn, $totalPages, $coverImage, $publisherId, $authorIds);
+    }
+
     /**
      * @param ArrayCollection $bookFormParams
      * @throws BookDescriptionInvalidException

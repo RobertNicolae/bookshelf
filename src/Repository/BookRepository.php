@@ -126,7 +126,7 @@ class BookRepository
         return $books;
     }
 
-    public function update(int $bookId, string $name, string $description, string $isbn, int $totalPages, string $coverImage, int $publisherId, array $authorsIds): void
+    public function update(int $bookId, string $name, string $description, string $isbn, int $totalPages, string $coverImage, int $publisherId, array $authorIds): void
     {
         $query = "UPDATE book b SET b.name = :name , b.description = :description, b.isbn = :isbn, b.total_pages = :totalPages, b.cover_image = :cover_image, b.publisher_id = :publisher_id WHERE b.id = :id";
         $stmt = $this->conn->prepare($query);
@@ -139,17 +139,17 @@ class BookRepository
             ":cover_image" => $coverImage,
             ":id" => $bookId,
         ]);
-        $bookId = $this->conn->lastInsertId();
 
-        $query = "DELETE FROM author_book ab WHERE ab.book_id = :bookId ";
+        $query = "DELETE FROM author_book WHERE book_id = :bookId;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([
-           ":bookId" => $bookId
+           ":bookId" => $bookId,
         ]);
 
         $query = "INSERT INTO author_book(author_id, book_id) VALUES ";
 
-        foreach ($authorsIds as $authorId) {
+
+        foreach ($authorIds as $authorId) {
             $query .= "(" . $authorId . "," . $bookId . "), ";
         }
         $query = rtrim($query, ", ");

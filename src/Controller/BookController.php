@@ -82,7 +82,7 @@ class BookController extends AbstractController
     {
         if ($request->isMethod(Request::METHOD_POST)) {
 
-            $this->bookRepo->update($request->getRequestParams()->get("id"), $request->getRequestParams()->get("book_name"), $request->getRequestParams()->get("book_description"), $request->getRequestParams()->get("isbn"), $request->getRequestParams()->get("total_pages"), $request->getRequestParams()->get("cover_image"), $request->getRequestParams()->get("publisher"), $request->getRequestParams()->get());
+            $this->bookRepo->update($request->getRequestParams()->get("id"), $request->getRequestParams()->get("book_name"), $request->getRequestParams()->get("book_description"), $request->getRequestParams()->get("isbn"), $request->getRequestParams()->get("total_pages"), $request->getRequestParams()->get("cover_image"), $request->getRequestParams()->get("publisher"), $request->getRequestParams()->get("authors"));
             header("Location: /books");
             die();
 
